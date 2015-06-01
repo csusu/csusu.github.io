@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://yoursite.com/"/>
-  <updated>2015-06-01T01:40:56.000Z</updated>
+  <updated>2015-06-01T05:45:27.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -13,6 +13,23 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[Start Blogging]]></title>
+    <link href="http://yoursite.com/2015/06/01/first-blog/"/>
+    <id>http://yoursite.com/2015/06/01/first-blog/</id>
+    <published>2015-06-01T05:27:27.000Z</published>
+    <updated>2015-06-01T05:45:27.000Z</updated>
+    <content type="html"><![CDATA[<p>上周在github上注册了账号并开启了博客<br>今天终于完成了在本地的配置，主要问题在于<em>hexo</em>的使用<br>尽量使用<strong>官方文档</strong>吧， 网上搜索的东西总是或多或少的存在问题<br>确定使用<em>freemind</em>的主题，基于bootstrap效果<strong>简单而且优雅</strong>，非常好</p>
+<p>Now,开始我的github博客之旅…</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>上周在github上注册了账号并开启了博客<br>今天终于完成了在本地的配置，主要问题在于<em>hexo</em>的使用<br>尽量使用<strong>官方文档</strong>吧， 网上搜索的东西总是或多或少的存在问题<br>确定使用<em>freemind</em>的]]>
+    </summary>
+    
+      <category term="blog" scheme="http://yoursite.com/tags/blog/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[Hello World]]></title>
