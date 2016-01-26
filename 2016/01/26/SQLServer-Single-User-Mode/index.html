@@ -1,0 +1,252 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>SQLServer Single User Mode | susu&#39;s Blog</title>
+  <meta name="author" content="susu">
+  
+  <meta name="description" content="SQL Server 单用户模式解决访问权限问题1. 问题描述本机操作系统Windows 2012 Professional, 安装了SQL SERVER 2012 EXPRESS，只开启了Windows身份验证，在非域环境下运行正常。最近因为公司AD域升级，要求所有机器加入Windows Serv">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="SQLServer Single User Mode"/>
+  <meta property="og:site_name" content="susu&#39;s Blog"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">susu&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">		
+			<h1> SQLServer Single User Mode</h1>
+		</div>		
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div class="col-md-9">
+	
+
+			
+
+	<!-- content -->
+	<div class="mypage">		
+	    <h1 id="SQL_Server_单用户模式解决访问权限问题">SQL Server 单用户模式解决访问权限问题</h1><h2 id="1-_问题描述">1. 问题描述</h2><p>本机操作系统Windows 2012 Professional, 安装了SQL SERVER 2012 EXPRESS，只开启了Windows身份验证，在非域环境下运行正常。<br>最近因为公司AD域升级，要求所有机器加入Windows Server 2012 R2域环境。本机加入域环境后其他程序均正常，但是运行SQL Server Management Studio(ssms)后，<br>首先是无法连接，更改到正确的<strong>机器名\实例名</strong>并使用对应的<strong>域用户账号</strong>后可以正常连接数据库，但是没有任何管理权限，原先建立的数据库也无法访问，错误提示是：</p>
+<blockquote>
+<p>用户没有执行此操作的权限或者对象不存在。(与原文可能不一致，大概是这个意思)</p>
+</blockquote>
+<p>由于没有启用SQL Server身份验证，因此sa账号无法登陆，尝试启用sa账号也报同样的错误。</p>
+<h2 id="2-问题分析">2.问题分析</h2><p>通过SSMS的错误提示，分析最可能的原因是SQL Server账号访问权限问题。因为加域后，新的域账号没有对应访问权限。<br>尝试使用本地管理员账号登陆操作系统后再连接数据库，还是同样的问题。根据网上的搜索结果提示可以使用<br><a href="https://technet.microsoft.com/en-us/sysinternals/bb897553.aspx" target="_blank" rel="external">psexec</a>工具执行下面的指令：</p>
+<blockquote>
+<p>PsExec.exe -i -s ‘C:\Program Files (x86)\Microsoft SQL Server\110\Tools\Binn\ManagementStudio\Ssms.exe’</p>
+</blockquote>
+<p>获得system权限运行ssms，不过仍然无法解决问题。</p>
+<h2 id="3-问题解决">3.问题解决</h2><p>显然通过用各种Windows系统账号(如administrator、system等)运行ssms是无法解决问题的。关键还是要能够启用数据库的<strong>sa账号</strong>。<br>因此考虑使用SQL Server的维护模式来启用sa账号。</p>
+<ul>
+<li><p>Step 1 关闭<em>SQL SERVER (EXPRESS)</em>服务。管理员命令行下执行下列命令：</p>
+<blockquote>
+<p>NET STOP MSSQL$SQLEXPRESS</p>
+</blockquote>
+</li>
+<li><p>Step 2 以单用户模式启动<em>SQL SERVER (EXPRESS)</em>服务：</p>
+<blockquote>
+<p>NET START MSSQL$SQLEXPRESS /M</p>
+</blockquote>
+</li>
+<li><p>Step 3 管理员身份运行ssms工具，并新建查询。注意此时是单用户模式，不能同时新建查询和连接服务器。</p>
+</li>
+<li><p>Step 4 启用sa账号：</p>
+<blockquote>
+<p>alter login sa enabled</p>
+</blockquote>
+</li>
+<li><p>Step 5 以多用户模式重启SQL Server服务</p>
+<blockquote>
+<p>NET STOP MSSQL$SQLEXPRESS<br>NET START MSSQL$SQLEXPRESS</p>
+</blockquote>
+</li>
+</ul>
+<p>此时已经实现了sa账号的启用，但是却不能用sa账号登陆，因为服务器还没有设置为<em>Windows和SQLServer混合登陆模式</em>，修改注册表</p>
+<blockquote>
+<p>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft SQL Server\MSSQL11.SQLEXPRESS\MSSQLServer</p>
+</blockquote>
+<p>路径下的LoginMode值从1改为2。然后重启SQL Server服务，使用sa账号登陆后将当前域账号设置为sysadmin。</p>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+		
+          <li class="prev disabled"><a><i class="fa fa-arrow-circle-o-left"></i>上一页</a></li>
+        
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2015/06/01/first-blog/" class="alignright next">下一页<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">留言</h2>
+
+  
+</section>
+
+	
+	</div> <!-- col-md-9/col-md-12 -->
+	
+	
+		<div class="col-md-3"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2016-01-26 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/SQLServer-单用户-权限/">SQLServer 单用户 权限<span>1</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	
+
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2016 susu
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+</body>
+   </html>
