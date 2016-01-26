@@ -110,7 +110,7 @@
 <p>用户没有执行此操作的权限或者对象不存在。(与原文可能不一致，大概是这个意思)</p>
 </blockquote>
 <p>由于没有启用SQL Server身份验证，因此sa账号无法登陆，尝试启用sa账号也报同样的错误。</p>
-<h2 id="2-问题分析">2.问题分析</h2><p>通过SSMS的错误提示，分析最可能的原因是SQL Server账号访问权限问题。因为加域后，新的域账号没有对应访问权限。尝试使用本地管理员账号登陆操作系统后再连接数据库，还是同样的问题。根据网上的搜索结果提示可以使用<br><a href="https://technet.microsoft.com/en-us/sysinternals/bb897553.aspx" target="_blank" rel="external">psexec</a>工具执行下面的指令：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; PsExec.exe -i <span class="operator">-s</span> <span class="string">'C:\Program Files (x86)\Microsoft SQL Server\110\Tools\Binn\ManagementStudio\Ssms.exe'</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="2-问题分析">2.问题分析</h2><p>通过SSMS的错误提示，分析最可能的原因是SQL Server账号访问权限问题。因为加域后，新的域账号没有对应访问权限。尝试使用本地管理员账号登陆操作系统后再连接数据库，还是同样的问题。根据网上的搜索结果提示可以使用<a href="https://technet.microsoft.com/en-us/sysinternals/bb897553.aspx" target="_blank" rel="external">psexec</a>工具执行下面的指令：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; PsExec.exe -i <span class="operator">-s</span> <span class="string">'C:\Program Files (x86)\Microsoft SQL Server\110\Tools\Binn\ManagementStudio\Ssms.exe'</span></span><br></pre></td></tr></table></figure></p>
 <p>获得system权限运行ssms，不过仍然无法解决问题。</p>
 <h2 id="3-问题解决">3.问题解决</h2><p>显然通过用各种Windows系统账号(如administrator、system等)运行ssms是无法解决问题的。关键还是要能够启用数据库的<strong>sa账号</strong>。因此考虑使用SQL Server的维护模式来启用sa账号。</p>
 <ul>
