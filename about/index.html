@@ -24,6 +24,7 @@
   <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
   <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
@@ -97,11 +98,11 @@
 	<div class="col-md-12">
 	
 
-			
-
 	<!-- content -->
 	<div class="mypage">		
-	    	  
+	  		
+
+	  	  
 	</div>
 
 	<div>
@@ -117,12 +118,13 @@
 	
 	<!-- comment -->
 	
-	
 	</div> <!-- col-md-9/col-md-12 -->
-	
-	
+		
+		
 
 </div><!-- row -->
+
+
 
 	</div>
   </div>
@@ -134,6 +136,9 @@
 </p> </footer>
 </div> <!-- container-narrow -->
   
+
+
+  
 <a id="gotop" href="#">   
   <span>▲</span> 
 </a>
@@ -142,7 +147,7 @@
 <script src="/js/gallery.js"></script>
 <script src="/js/bootstrap.min.js"></script>
 <script src="/js/main.js"></script>
-
+<script src="/js/search.js"></script> 
 
 
 <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
@@ -153,6 +158,16 @@
 })(jQuery);
 </script>
 
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
 
 </body>
    </html>

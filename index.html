@@ -24,6 +24,7 @@
   <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
   <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
   <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
@@ -96,7 +97,7 @@
       <i class="fa fa-heart"></i>
       Yet another bootstrap theme.
 </div>    
-
+		<div id="top_search"></div>
 		<div class="mypage">
 		
 		<!-- title and entry -->
@@ -106,18 +107,16 @@
 	<!-- display as entry -->	
 		<h3 class="title">
 			<div class="date"> 2016-01-26 </div>
-			<div class="article-title"><a href="/2016/01/26/SQLServer-Single-User-Mode/" >SQLServer Single User Mode</a></div>						
+			<div class="article-title"><a href="/2016/01/26/SQLServer-Single-User-Mode/" >SQL Server 单用户模式解决访问权限问题</a></div>						
 		</h3>
 	
 
 
 			<div class="entry">
   <div class="row">
-  
-	<div class="col-md-12">
-	  
 	
-	  <h1 id="SQL_Server_单用户模式解决访问权限问题">SQL Server 单用户模式解决访问权限问题</h1><h2 id="1-_问题描述">1. 问题描述</h2><p>本机操作系统Windows 2012 Professional, 安装了SQL SERVER 2012 EXPRESS，只开启了Windows身份验证，在非域环境下运行正常。最近因为公司AD域升级，要求所有机器加入Windows Server 2012 R2域环境。本机加入域环境后其他程序均正常，但是运行SQL Server Management Studio(ssms)后，首先是无法连接，更改到正确的<strong>机器名\实例名</strong>并使用对应的<strong>域用户账号</strong>后可以正常连接数据库，但是没有任何管理权限，原先建立的数据库也无法访问，错误提示是：</p>
+	
+		<h2 id="1-问题描述">1.问题描述</h2><p>本机操作系统Windows 2012 Professional, 安装了SQL SERVER 2012 EXPRESS，只开启了Windows身份验证，在非域环境下运行正常。最近因为公司AD域升级，要求所有机器加入Windows Server 2012 R2域环境。本机加入域环境后其他程序均正常，但是运行SQL Server Management Studio(ssms)后，首先是无法连接，更改到正确的<strong>机器名\实例名</strong>并使用对应的<strong>域用户账号</strong>后可以正常连接数据库，但是没有任何管理权限，原先建立的数据库也无法访问，错误提示是：</p>
 <blockquote>
 <p>用户没有执行此操作的权限或者对象不存在。(与原文可能不一致，大概是这个意思)</p>
 </blockquote>
@@ -150,10 +149,7 @@
 
 	
 	</div>
-	
-  
-</div>
-	<a type="button" href="/2016/01/26/SQLServer-Single-User-Mode/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2016/01/26/SQLServer-Single-User-Mode/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -169,19 +165,14 @@
 
 			<div class="entry">
   <div class="row">
-  
-	<div class="col-md-12">
-	  
 	
-	  <p>上周在github上注册了账号并开启了博客<br>今天终于完成了在本地的配置，主要问题在于<em>hexo</em>的使用<br>尽量使用<a href="http://hexo.io/zh-cn/docs/" target="_blank" rel="external"><strong>官方文档</strong></a>吧， 网上搜索的东西总是或多或少的存在问题<br>确定使用<em>freemind</em>的主题，基于bootstrap效果<strong>简单而且优雅</strong>，非常好</p>
+	
+		<p>上周在github上注册了账号并开启了博客<br>今天终于完成了在本地的配置，主要问题在于<em>hexo</em>的使用<br>尽量使用<a href="http://hexo.io/zh-cn/docs/" target="_blank" rel="external"><strong>官方文档</strong></a>吧， 网上搜索的东西总是或多或少的存在问题<br>确定使用<em>freemind</em>的主题，基于bootstrap效果<strong>简单而且优雅</strong>，非常好</p>
 <p>Now,开始我的github博客之旅…</p>
 
 	
 	</div>
-	
-  
-</div>
-	<a type="button" href="/2015/06/01/first-blog/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2015/06/01/first-blog/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -197,11 +188,9 @@
 
 			<div class="entry">
   <div class="row">
-  
-	<div class="col-md-12">
-	  
 	
-	  <p>Welcome to <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="http://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
+	
+		<p>Welcome to <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="http://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
 <h2 id="Quick_Start">Quick Start</h2><h3 id="Create_a_new_post">Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
 <p>More info: <a href="http://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
 <h3 id="Run_server">Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
@@ -213,10 +202,7 @@
 
 	
 	</div>
-	
-  
-</div>
-	<a type="button" href="/2015/01/01/hello-world/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2015/01/01/hello-world/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -243,12 +229,14 @@
 		<div class="col-md-3">
 	<div id="sidebar">
 	
-			<div class="form-group has-success has-feedback">
-  <form action="//google.com/search" method="get" accept-charset="utf-8" >
-    <input type="search" name="q" results="0" placeholder="搜索" class="form-control">
-    <input type="hidden" name="q" value="site:yoursite.com">	
-  </form>
-</div>
+			
+  <div id="site_search">
+   <div class="form-group">
+    <input type="text" id="local-search-input" name="q" results="0" placeholder="搜索" class="st-search-input st-default-search-input form-control"/>
+   </div>  
+  <div id="local-search-result"></div>
+  </div>
+
 
 		
 			
@@ -258,9 +246,9 @@
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/SQLServer-单用户-权限/">SQLServer 单用户 权限<span>1</span></a></li>
-		
 			<li><a href="/tags/blog/">blog<span>1</span></a></li>
+		
+			<li><a href="/tags/SQLServer/">SQLServer<span>1</span></a></li>
 		
 		 
 		</ul>
@@ -274,7 +262,7 @@
   <ul class="entry list-unstyled">
     
       <li>
-        <a href="/2016/01/26/SQLServer-Single-User-Mode/" ><i class="fa fa-file-o"></i>SQLServer Single User Mode...</a>
+        <a href="/2016/01/26/SQLServer-Single-User-Mode/" ><i class="fa fa-file-o"></i>SQL Server 单用户模式解决访问权限问题...</a>
       </li>
     
       <li>
@@ -319,6 +307,9 @@
 </p> </footer>
 </div> <!-- container-narrow -->
   
+
+
+  
 <a id="gotop" href="#">   
   <span>▲</span> 
 </a>
@@ -327,7 +318,7 @@
 <script src="/js/gallery.js"></script>
 <script src="/js/bootstrap.min.js"></script>
 <script src="/js/main.js"></script>
-
+<script src="/js/search.js"></script> 
 
 
 <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
@@ -338,6 +329,16 @@
 })(jQuery);
 </script>
 
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
 
 </body>
    </html>
