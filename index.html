@@ -106,6 +106,47 @@
 	
 	<!-- display as entry -->	
 		<h3 class="title">
+			<div class="date"> 2016-05-12 </div>
+			<div class="article-title"><a href="/2016/05/12/SQLServer-Retrieve-Account/" >SQL Server 找回sa账号密码</a></div>						
+		</h3>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>使用SQL Server时，有时候会遇到sa密码忘记，而且又没有启用Windows身份验证，因此无法进行需要使用数据管理员权限才能完成的操作。</p>
+<p>解决办法的思路是，利用Windows管理员账号<code>启动SQL Server的单用户模式</code>，然后以管理员权限运行<code>sqlcmd</code>执行相关的语句启用或者修改sa账号，或者添加其他具有数据库服务器管理员权限的账号。具体步骤如下：</p>
+<p>1.<strong>停止SQL SERVER 实例服务。</strong>使用services.msc或者如下语句停止SQL Server实例服务：</p>
+<pre><code><span class="blockquote">&gt; net stop MSSQL$实例名</span>
+</code></pre><p> 或者</p>
+<pre><code><span class="blockquote">&gt; sc stop MSSQL$实例名</span>
+</code></pre><p>2.<strong>找到SQL Server服务程序，并且以<code>-m</code>选项启动。</strong>在SQL Server配置管理器中<code>SQL Server服务</code>属性可以看到启动服务实例的全路径和选项(不能复制)，例如以管理员身份运行如下命令：</p>
+<pre><code>&gt; "c:<span class="command">\Program</span> Files<span class="command">\Microsoft</span> SQL Server<span class="command">\MSSQL</span>11.SQLEXPRESS<span class="command">\MSSQL</span><span class="command">\Binn</span><span class="command">\sqlservr</span>.exe" -sSQLEXPRESS -m
+</code></pre><p>3.<strong>以管理员身份运行sqlcmd</strong>。启动sqlcmd后执行如下命令：</p>
+<pre><code>&gt; create login login_name with password=<span class="string">'Your Login Password'</span>
+&gt; <span class="keyword">go</span>
+&gt; sp_addsrvrolemember <span class="string">'login_name'</span>,<span class="string">'sysadmin'</span>
+&gt; <span class="keyword">go</span>
+</code></pre><p> 可以新增一个具有管理员权限的账号 或者</p>
+<pre><code>&gt; alter login login_name <span class="keyword">with</span> password=<span class="symbol">'Your</span> login password'
+&gt; go
+</code></pre><p> 修改某个用户账号的密码等操作</p>
+<p>4.<strong>停止sqlcmd(<code>步骤3</code>)和SQL Server 维护模式(<code>步骤2</code>)。</strong></p>
+<p>5.<strong>重启SQL Server服务。</strong></p>
+<pre><code>&gt; <span class="winutils">net</span> <span class="built_in">start</span> MSSQL$实例名
+</code></pre>
+	
+	</div>
+  <a type="button" href="/2016/05/12/SQLServer-Retrieve-Account/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->	
+		<h3 class="title">
 			<div class="date"> 2016-01-26 </div>
 			<div class="article-title"><a href="/2016/01/26/SQLServer-Single-User-Mode/" >SQL Server 单用户模式解决访问权限问题</a></div>						
 		</h3>
@@ -246,9 +287,9 @@
 		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/blog/">blog<span>1</span></a></li>
+			<li><a href="/tags/SQLServer/">SQLServer<span>2</span></a></li>
 		
-			<li><a href="/tags/SQLServer/">SQLServer<span>1</span></a></li>
+			<li><a href="/tags/blog/">blog<span>1</span></a></li>
 		
 		 
 		</ul>
@@ -260,6 +301,10 @@
 <div class="widget">
   <h4>最新文章</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2016/05/12/SQLServer-Retrieve-Account/" ><i class="fa fa-file-o"></i>SQL Server 找回sa账号密码...</a>
+      </li>
     
       <li>
         <a href="/2016/01/26/SQLServer-Single-User-Mode/" ><i class="fa fa-file-o"></i>SQL Server 单用户模式解决访问权限问题...</a>
