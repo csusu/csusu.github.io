@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://csusu.github.io/2016/06/22/NTP-Client-Server/</loc>
+    <lastmod>2016-06-22T04:06:26.835Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://csusu.github.io/2016/05/12/SQLServer-Retrieve-Account/</loc>
     <lastmod>2016-05-12T06:11:46.347Z</lastmod>
   </url>
