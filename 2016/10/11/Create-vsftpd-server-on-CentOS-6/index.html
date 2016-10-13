@@ -1,0 +1,328 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>CentOS 6上搭建vsftp、samba和NFS文件服务器 | susu&#39;s Blog</title>
+  <meta name="author" content="susu">
+  
+  <meta name="description" content="文件服务器是企业内网环境比不可少的基础设施，Linux系统提供了三个非常好用的软件vsFTP、samba和NFS实现文件共享服务。
+VSFTP——Very Secure FTP1. 安装软件1$ sudo yum -y install vsftpd
+2. 配置软件软件安装完成后，系统中增加vsftp">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="CentOS 6上搭建vsftp、samba和NFS文件服务器"/>
+  <meta property="og:site_name" content="susu&#39;s Blog"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">susu&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">		
+			<h1> CentOS 6上搭建vsftp、samba和NFS文件服务器</h1>
+		</div>		
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <p>文件服务器是企业内网环境比不可少的基础设施，Linux系统提供了三个非常好用的软件<code>vsFTP</code>、<code>samba</code>和<code>NFS</code>实现文件共享服务。</p>
+<h1 id="VSFTP——Very_Secure_FTP">VSFTP——Very Secure FTP</h1><h2 id="1-_安装软件">1. 安装软件</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo yum -y install vsftpd</span><br></pre></td></tr></table></figure>
+<h2 id="2-_配置软件">2. 配置软件</h2><p>软件安装完成后，系统中增加vsftpd服务，该服务的主要配置文件在 <strong>/etc/vsftpd/vsftpd.conf</strong> 。该配置文件是一个示例配置，并且对示例中的每一个选项有注释，但是不完全。</p>
+<p>2.1 完全的配置文件选项说明请参考：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ man vsftpd.conf</span><br></pre></td></tr></table></figure></p>
+<p>实践中一些个人认为比较重要的配置选项</p>
+<pre><code><span class="variable">pam_service_name=</span>/etc/pam.d/vsftpd  <span class="comment">#启用PAM(Pluggable Authentication Module)</span>
+<span class="variable">guest_enable=</span>YES                    <span class="comment">#启用虚拟用户功能</span>
+<span class="variable">guest_username=</span>ftp                  <span class="comment">#指定虚拟用户的宿主用户</span>
+<span class="variable">user_config_dir=</span>/etc/vsftpd/conf    <span class="comment">#设置虚拟用户个人vsftp的服务配置文件路径，每个虚拟用户对应该目录下的一个文件配置该虚拟用户的权限等信息</span>
+<span class="variable">userlist_enable=</span>YES
+<span class="variable">virtual_use_local_privs=</span>YES         <span class="comment">#虚拟用户功能必须借助使用本地宿主用户权限</span>
+<span class="variable">tcp_wrappers=</span>YES
+<span class="variable">use_localtime=</span>YES                   <span class="comment">#use local time instead of GMT</span>
+
+<span class="variable">pasv_enable=</span>YES                     <span class="comment">#被动模式</span>
+<span class="variable">pasv_min_port=</span><span class="number">22222</span>                 <span class="comment">#被动模式最小数据连接端口</span>
+<span class="variable">pasv_max_port=</span><span class="number">33333</span>                 <span class="comment">#被动模式最大数据链接端口</span>
+</code></pre><p><code>注意</code>：配合使用<code>PAM</code>可以启用虚拟用户功能，为了让Windows Explorer作为FTP客户端需要启用<code>被动模式</code>，<br>设置相关的端口范围并在后面的<code>防火墙</code>设置相关规则允许访问。如果启用了<code>SELinux</code>，也需要设置相应规则。</p>
+<p>2.2 FTP的主动模式和被动模式</p>
+<p>2.3 查看和设置服务启动配置<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ chkconfig --list | grep vsftpd</span><br><span class="line">$ sudo chkconfig --level <span class="number">2345</span> vsftpd</span><br></pre></td></tr></table></figure></p>
+<h2 id="3-_配置SELinux规则">3. 配置SELinux规则</h2><p>默认情况下CentOS 开启了SELinux，某些应用的功能会受到限制。<br>3.1 查看SELinux的启用状态：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ getenforce</span><br></pre></td></tr></table></figure></p>
+<p>3.2 启用或关闭SELinux<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo setenforce <span class="number">1</span> (或 <span class="number">0</span>)</span><br></pre></td></tr></table></figure></p>
+<p>一般情况下不建议关闭SELinux，要开启相关的功能，只需最启用对应的规则即可，如果关闭则会降低系统的安全防护。<br>3.3 ftp涉及的相关规则<br>查看规则：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ getsebool <span class="operator">-a</span> | grep ftp</span><br></pre></td></tr></table></figure></p>
+<p>设置规则<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ sudo setsebool -P allow_ftpd_full_access on</span><br><span class="line">$ sudo setsebool -P ftp_home_dir on</span><br><span class="line">$ sudo setsebool -P ftpd_use_passive_mode on</span><br></pre></td></tr></table></figure></p>
+<p><code>注意</code>：-P选项表示重启规则不丢失，即Persistent。</p>
+<h2 id="4-_配置防火墙">4. 配置防火墙</h2><pre><code>-<span class="keyword">A</span> INPUT -s <span class="number">192.168.0.0</span>/16 -p tcp -m tcp --dport 21 -m state --state NEW,ESTABLISHED -j ACCEPT 
+-<span class="keyword">A</span> INPUT -s <span class="number">192.168.0.0</span>/16 -p tcp -m multiport --dports <span class="number">22222:33333</span> -j ACCEPT 
+</code></pre><h2 id="5-_编码问题">5. 编码问题</h2><p>由于之前的FTP服务器通过Windows Explorer客户端上传文件或者文件夹采用的是GBK编码，而Linux系统一般使用UTF-8编码，因此可能会存在乱码问题。方案一是给vsftp打补丁让其支持GBK，方案二是将文件和目录编码全部转换为UTF-8编码。实际方案二更好，实现更<code>简单</code>而且<code>编码格式统一</code>，在Linux系统上和samba都不会存在乱码问题。使用<code>convmv</code>工具实现转换：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ convmv <span class="operator">-f</span> GBK -t UTF-<span class="number">8</span> -r dir_name --notest</span><br></pre></td></tr></table></figure></p>
+<h1 id="samba">samba</h1><p>samba可以实现windows和Linux之间的文件共享</p>
+<h2 id="1-_安装软件-1">1. 安装软件</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo yum -y install samba</span><br></pre></td></tr></table></figure>
+<h2 id="2-_配置软件-1">2. 配置软件</h2><p>主要配置文件在 <strong>/etc/samba/smb.conf</strong>，添加共享定义：</p>
+<pre><code>[ftpfiles]
+        <span class="variable">comment =</span> FTP files
+        <span class="variable">path =</span> /var/ftp/pub
+        <span class="variable">writable =</span> no
+        guest <span class="variable">ok =</span> yes
+        <span class="variable">browseable =</span> yes
+</code></pre><h2 id="3-_配置SELinux规则-1">3. 配置SELinux规则</h2><pre><code>samba_enable_home_dirs<span class="function"> --&gt;</span> <span class="literal">on</span>
+samba_export_all_ro<span class="function"> --&gt;</span> <span class="literal">on</span>
+</code></pre><h2 id="4-IPTables_防火墙">4.IPTables 防火墙</h2><pre><code>-<span class="keyword">A</span> INPUT -s 10.*.0.0/16 -p tcp -m multiport --dports <span class="number">139,445</span> -j ACCEPT 
+-<span class="keyword">A</span> INPUT -s 10.*.0.0/16 -p udp -m multiport --dports <span class="number">137,138</span> -j ACCEPT 
+</code></pre><h2 id="5-smb服务启动配置">5.smb服务启动配置</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo chkconfig --level <span class="number">2345</span> smb on</span><br></pre></td></tr></table></figure>
+<h1 id="NFS——Network_File_System">NFS——Network File System</h1><p>NFS可以实现Linux、Unix系统之间的文件共享，可以将远程文件系统挂载到本地。</p>
+<h2 id="1-安装和配置">1.安装和配置</h2><p>nfs服务配置文件在 <strong>/etc/sysconfig/nfs</strong>,几个重要的配置选项：</p>
+<pre><code><span class="preprocessor"># TCP port rpc.lockd should listen on.</span>
+<span class="preprocessor">#LOCKD_TCPPORT=32803</span>
+LOCKD_TCPPORT=<span class="number">4004</span>
+<span class="preprocessor"># UDP port rpc.lockd should listen on.</span>
+<span class="preprocessor">#LOCKD_UDPPORT=32769</span>
+LOCKD_UDPPORT=<span class="number">4004</span>
+<span class="preprocessor"># Optional arguments passed to rpc.mountd. See rpc.mountd(8)</span>
+<span class="preprocessor">#RPCMOUNTDOPTS=""</span>
+<span class="preprocessor"># Port rpc.mountd should listen on.</span>
+<span class="preprocessor">#MOUNTD_PORT=892</span>
+MOUNTD_PORT=<span class="number">4002</span>
+<span class="preprocessor">#</span>
+<span class="preprocessor">#</span>
+<span class="preprocessor"># Optional arguments passed to rpc.statd. See rpc.statd(8)</span>
+<span class="preprocessor">#STATDARG=""</span>
+<span class="preprocessor"># Port rpc.statd should listen on.</span>
+<span class="preprocessor">#STATD_PORT=662</span>
+STATD_PORT=<span class="number">4003</span>
+</code></pre><p><code>注意</code>:与nfs相关的几个服(rpc 111、mountd )端口的设置，需要在防火墙中设置相关规则。</p>
+<p>主要<code>共享配置</code>文件在 <strong>/etc/exports</strong>。具体配置格式如下：</p>
+<pre><code><span class="regexp">/var/</span>ftp<span class="regexp">/pub/</span>ISOImages  <span class="number">10.</span>*.<span class="number">0.0</span>/<span class="number">16</span>(ro)
+<span class="regexp">/var/</span>backup<span class="regexp">/backup/</span>itdb <span class="number">10.</span>*.<span class="number">1.57</span>(rw,all_squash,sync,anonuid=<span class="number">502</span>,anongid=<span class="number">502</span>)
+</code></pre><h2 id="2-IPTables防火墙配置">2.IPTables防火墙配置</h2><pre><code>-A INPUT -s <span class="number">10</span>.*.<span class="number">0.0</span>/<span class="number">16</span> -p tcp -m multiport --dports <span class="number">111</span>,<span class="number">2049</span> -j ACCEPT 
+-A INPUT -s <span class="number">10</span>.*.<span class="number">0.0</span>/<span class="number">16</span> -p udp -m multiport --dports <span class="number">111</span>,<span class="number">2049</span> -j ACCEPT 
+-A INPUT -s <span class="number">10</span>.*.<span class="number">0.0</span>/<span class="number">16</span> -p tcp -m <span class="keyword">state</span> --state NEW -m multiport --dports <span class="number">4002</span>:<span class="number">4004</span> -j ACCEPT 
+-A INPUT -s <span class="number">10</span>.*.<span class="number">0.0</span>/<span class="number">16</span> -p udp -m <span class="keyword">state</span> --state NEW -m multiport --dports <span class="number">4002</span>:<span class="number">4004</span> -j ACCEPT 
+</code></pre><h1 id="相关工具">相关工具</h1><table>
+<thead>
+<tr>
+<th>名称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>rsync</td>
+<td>remote synchronize 远程同步工具，实现远程文件夹同步备份,服务端使用—daemon选项</td>
+</tr>
+<tr>
+<td>nc</td>
+<td>netcat 建立主机之间的TCP连接并传输数据</td>
+</tr>
+<tr>
+<td>convmv</td>
+<td>文件和目录名称编码转换工具</td>
+</tr>
+<tr>
+<td>autofs</td>
+<td>文件系统自动挂载服务,可结合NFS一起使用</td>
+</tr>
+</tbody>
+</table>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+		
+          <li class="prev disabled"><a><i class="fa fa-arrow-circle-o-left"></i>上一页</a></li>
+        
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2016/06/22/NTP-Client-Server/" class="alignright next">下一页<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">留言</h2>
+
+  
+</section>
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2016-10-11 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/vsftpd/">vsftpd<span>1</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2016 susu
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

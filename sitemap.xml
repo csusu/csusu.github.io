@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://csusu.github.io/2016/10/11/Create-vsftpd-server-on-CentOS-6/</loc>
+    <lastmod>2016-10-13T05:16:02.009Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://csusu.github.io/2016/06/22/NTP-Client-Server/</loc>
     <lastmod>2016-06-22T04:06:26.835Z</lastmod>
   </url>
